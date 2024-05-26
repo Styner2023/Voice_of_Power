@@ -78,6 +78,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Routes
+app.get('/', (req, res) => {
+    res.send('Welcome to the Voice of Power application!');
+});
+
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
     bcrypt.hash(password, 10, (err, hash) => {
