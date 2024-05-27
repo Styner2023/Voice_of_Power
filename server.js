@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const User = require('./models/user'); // Ensure User model is imported
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,25 +21,6 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('MongoDB connection error:', err));
 
-// User model
-const UserSchema = new mongoose.Schema({
-    username: String,
-    password: String,
-    books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }]
-});
-
-const User = mongoose.model('User', UserSchema);
-
-// Book model
-const BookSchema = new mongoose.Schema({
-    filename: String,
-    originalname: String,
-    path: String,
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-});
-
-const Book = mongoose.model('Book', BookSchema);
-
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -47,10 +29,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Passport configuration
-passport.use(new LocalStrategy((username, password, done) => {
-    User.findOne({ username: username }, (err, user) => {
+passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+    User.findOne({ email: email }, (err, user) => {
         if (err) return done(err);
-        if (!user) return done(null, false, { message: 'Incorrect username.' });
+        if (!user) return done(null, false, { message: 'Incorrect email.' });
         bcrypt.compare(password, user.password, (err, res) => {
             if (res) return done(null, user);
             else return done(null, false, { message: 'Incorrect password.' });
@@ -69,19 +51,21 @@ passport.deserializeUser((id, done) => {
 });
 
 // Routes
-const uploadRoute = require('./routes/upload'); // Adjust the path if necessary
+const uploadRoute = require('./routes/upload');
+const ttsRoute = require('./routes/tts'); // Include the TTS route
 
 app.use('/upload', uploadRoute);
+app.use('/tts', ttsRoute); // Use the TTS route
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Voice of Power application!');
 });
 
 app.post('/register', (req, res) => {
-    const { username, password } = req.body;
+    const { name, email, password } = req.body;
     bcrypt.hash(password, 10, (err, hash) => {
         if (err) return res.status(500).send('Error registering new user.');
-        const newUser = new User({ username: username, password: hash });
+        const newUser = new User({ name, email, password: hash });
         newUser.save(err => {
             if (err) res.status(500).send('Error registering new user.');
             else res.status(200).send('User registered.');
