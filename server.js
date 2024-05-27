@@ -6,7 +6,6 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const multer = require('multer');
 const path = require('path');
 
 const app = express();
@@ -69,19 +68,11 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-// File upload configuration
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
-
-const upload = multer({ storage: storage });
-
 // Routes
+const uploadRoute = require('./routes/upload'); // Adjust the path if necessary
+
+app.use('/upload', uploadRoute);
+
 app.get('/', (req, res) => {
     res.send('Welcome to the Voice of Power application!');
 });
@@ -99,27 +90,6 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/login', passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/' }));
-
-app.post('/upload', upload.single('book'), (req, res) => {
-    if (!req.isAuthenticated()) {
-        return res.status(401).send('Not authenticated.');
-    }
-    const newBook = new Book({
-        filename: req.file.filename,
-        originalname: req.file.originalname,
-        path: req.file.path,
-        user: req.user._id
-    });
-    newBook.save(err => {
-        if (err) res.status(500).send('Error uploading book.');
-        else {
-            User.findByIdAndUpdate(req.user._id, { $push: { books: newBook._id } }, err => {
-                if (err) res.status(500).send('Error updating user.');
-                else res.status(200).send('Book uploaded.');
-            });
-        }
-    });
-});
 
 app.get('/dashboard', (req, res) => {
     if (req.isAuthenticated()) {
