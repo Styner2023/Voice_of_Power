@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -7,15 +8,18 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const path = require('path');
-require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Logging environment variables for debugging
+console.log("MONGO_URI from .env: ", process.env.MONGO_URI);
+console.log("JWT_SECRET from .env: ", process.env.JWT_SECRET);
+
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
+    .catch(err => console.log('MongoDB connection error:', err));
 
 // User model
 const UserSchema = new mongoose.Schema({
@@ -39,7 +43,7 @@ const Book = mongoose.model('Book', BookSchema);
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
+app.use(session({ secret: process.env.JWT_SECRET, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -126,6 +130,16 @@ app.get('/dashboard', (req, res) => {
     } else {
         res.status(401).send('Not authenticated.');
     }
+});
+
+app.get("/download/:id", (req, res) => {
+    Book.findById(req.params.id, (err, book) => {
+        if (err) return res.status(500).send("Error finding book.");
+        if (!book) return res.status(404).send("Book not found.");
+        if (book.user.toString() !== req.user._id.toString())
+            return res.status(403).send("Not authorized to access this book.");
+        res.download(book.path, book.originalname);
+    });
 });
 
 app.listen(port, () => {
