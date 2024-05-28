@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  minio:
+    image: minio/minio
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: MyRootUsernameforObjectStorage@2020
+      MINIO_ROOT_PASSWORD: MyRootPasswordforObjectStorage@2020
+    volumes:
+      - ./minio-storage:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+
