@@ -3,8 +3,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const pdfParse = require('pdf-parse');
-const Book = require('../models/book'); // Adjust the path to your Book model
-const User = require('../models/user'); // Ensure User model is imported if needed
+const Book = require('../models/book'); // Correct path
+const User = require('../models/user'); // Correct path
 
 const router = express.Router();
 
@@ -47,3 +47,4 @@ router.post('/upload', upload.single('pdf'), (req, res) => {
 });
 
 module.exports = router;
+

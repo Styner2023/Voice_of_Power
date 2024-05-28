@@ -7,9 +7,11 @@ const bodyParser = require('body-parser');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const path = require('path');
-const User = require('./models/user'); // Ensure User model is imported
+const User = require('./models/user'); // Ensure this path is correct
+const Book = require('./models/book'); // Ensure this path is correct
 
 const app = express();
+const uploadRoute = require('./routes/upload');
 const port = process.env.PORT || 3000;
 
 // Logging environment variables for debugging
@@ -53,9 +55,11 @@ passport.deserializeUser((id, done) => {
 // Routes
 const uploadRoute = require('./routes/upload');
 const ttsRoute = require('./routes/tts'); // Include the TTS route
+const authRoute = require('./routes/auth'); // Include the Auth route
 
 app.use('/upload', uploadRoute);
 app.use('/tts', ttsRoute); // Use the TTS route
+app.use('/auth', authRoute); // Use the Auth route
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Voice of Power application!');
@@ -96,6 +100,6 @@ app.get("/download/:id", (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+app.listen(3000, () => {
+    console.log('Server started on port 3000');
 });
