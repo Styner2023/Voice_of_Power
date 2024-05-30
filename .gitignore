@@ -14,3 +14,7 @@ node_modules/
 # System files
 .DS_Store
 .env
+checkpoints_v1/converter/checkpoint.pth
+checkpoints_v2/converter/checkpoint.pth
+checkpoints_v1/base_speakers/EN/checkpoint.pth
+checkpoints_v1/base_speakers/ZH/checkpoint.pth
