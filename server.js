@@ -31,13 +31,27 @@ const params = {
 
 ssm.getParameters(params, (err, data) => {
   if (err) {
-    console.log(err, err.stack);
+    console.log('Error fetching SSM parameters:', err);
+    process.exit(1);
   } else {
     // Assign parameters to process.env
-    data.Parameters.forEach(param => {
+    data.Parameters.forEach((param) => {
       const name = param.Name.split('/').pop(); // Get the parameter name without the prefix
       process.env[name] = param.Value;
     });
+
+    // Validate if all necessary environment variables are set
+    const requiredEnvVars = [
+      'AWS_REGION', 'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'DYNAMODB_USERS_TABLE',
+      'DYNAMODB_FILES_TABLE', 'S3_BUCKET_NAME', 'JWT_SECRET', 'PORT'
+    ];
+
+    for (const varName of requiredEnvVars) {
+      if (!process.env[varName]) {
+        console.error(`Environment variable ${varName} is not set.`);
+        process.exit(1);
+      }
+    }
 
     // Start the server after loading parameters
     startServer();
@@ -73,13 +87,19 @@ function startServer() {
     };
 
     dynamoDb.get(params, (err, data) => {
-      if (err) return done(err);
+      if (err) {
+        return done(err);
+      }
       const user = data.Item;
-      if (!user) return done(null, false, { message: 'Incorrect email.' });
+      if (!user) {
+        return done(null, false, { message: 'Incorrect email.' });
+      }
 
       bcrypt.compare(password, user.password, (err, res) => {
-        if (res) return done(null, user);
-        else return done(null, false, { message: 'Incorrect password.' });
+        if (res) {
+          return done(null, user);
+        }
+        return done(null, false, { message: 'Incorrect password.' });
       });
     });
   }));
@@ -95,7 +115,9 @@ function startServer() {
     };
 
     dynamoDb.get(params, (err, data) => {
-      if (err) return done(err);
+      if (err) {
+        return done(err);
+      }
       done(null, data.Item);
     });
   });
@@ -104,7 +126,7 @@ function startServer() {
   const upload = multer({ dest: 'uploads/' });
 
   app.post('/upload', upload.single('file'), (req, res) => {
-    const file = req.file;
+    const { file } = req;
     const filePath = path.join(__dirname, file.path);
 
     // Read file content
@@ -159,7 +181,9 @@ function startServer() {
   app.post('/register', (req, res) => {
     const { name, email, password } = req.body;
     bcrypt.hash(password, 10, (err, hash) => {
-      if (err) return res.status(500).send('Error registering new user.');
+      if (err) {
+        return res.status(500).send('Error registering new user.');
+      }
 
       const params = {
         TableName: process.env.DYNAMODB_USERS_TABLE,
