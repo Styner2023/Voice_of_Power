@@ -11,7 +11,7 @@ const s3 = new AWS.S3();
 
 const uploadToS3 = (key, body, contentType, callback) => {
   const params = {
-    Bucket: 'voice-of-power-checkpoints',
+    Bucket: process.env.S3_BUCKET_NAME, // Use the bucket name from environment variables
     Key: key,
     Body: body,
     ContentType: contentType,
@@ -28,7 +28,7 @@ const uploadToS3 = (key, body, contentType, callback) => {
 
 const getFileFromS3 = async (key) => {
   const params = {
-    Bucket: 'voice-of-power-checkpoints',
+    Bucket: process.env.S3_BUCKET_NAME, // Use the bucket name from environment variables
     Key: key,
   };
   return s3.getObject(params).promise();
