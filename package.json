@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1630.0",
+    "aws-sdk": "^2.1631.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -21,6 +21,7 @@
     "minio": "^8.0.0",
     "mongoose": "^8.4.0",
     "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",

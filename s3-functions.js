@@ -1,20 +1,37 @@
-const s3 = require('./aws-config');
+const AWS = require('aws-sdk');
+
+// AWS S3 configuration
+AWS.config.update({
+  region: process.env.AWS_REGION,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
+
+const s3 = new AWS.S3();
+
+const uploadToS3 = (key, body, contentType, callback) => {
+  const params = {
+    Bucket: 'voice-of-power-checkpoints',
+    Key: key,
+    Body: body,
+    ContentType: contentType,
+  };
+
+  s3.upload(params, (err, data) => {
+    if (err) {
+      console.error('Error uploading file:', err);
+      return callback(err);
+    }
+    callback(null, data);
+  });
+};
 
 const getFileFromS3 = async (key) => {
   const params = {
     Bucket: 'voice-of-power-checkpoints',
     Key: key,
   };
-
-  try {
-    const data = await s3.getObject(params).promise();
-    return data.Body;
-  } catch (error) {
-    console.error('Error getting file from S3:', error);
-    throw error;
-  }
+  return s3.getObject(params).promise();
 };
 
-module.exports = {
-  getFileFromS3,
-};
+module.exports = { uploadToS3, getFileFromS3 };

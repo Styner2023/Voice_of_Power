@@ -118,13 +118,20 @@
         document.getElementById('uploadBook').addEventListener('change', function(event) {
             const file = event.target.files[0];
             const formData = new FormData();
-            formData.append('book', file);
+            formData.append('file', file);
 
             fetch('/upload', {
                 method: 'POST',
                 body: formData
-            }).then(response => response.text()).then(data => {
-                alert(data);
+            }).then(response => response.json()).then(data => {
+                if (data.audioUrl) {
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = data.audioUrl;
+                    document.getElementById('bookView').appendChild(audio);
+                } else {
+                    alert('Error uploading file');
+                }
             });
         });
     </script>
