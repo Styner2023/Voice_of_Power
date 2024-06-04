@@ -33,3 +33,19 @@ secrets.json
 *.mp3
 
 node_modules/
+# Virtual environment
+venv/
+.env
+
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+
+# OS generated files
+.DS_Store
+
+# AWS credentials
+*.pem
