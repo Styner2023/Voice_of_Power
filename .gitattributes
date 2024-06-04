@@ -7,3 +7,6 @@ checkpoints_v2/converter/checkpoint.pth filter=lfs diff=lfs merge=lfs -text
 checkpoints_v1/* filter=lfs diff=lfs merge=lfs -text
 checkpoints_v2/* filter=lfs diff=lfs merge=lfs -text
 *.mp3 filter=lfs diff=lfs merge=lfs -text
+*.jar filter=lfs diff=lfs merge=lfs -text
+*.pyc filter=lfs diff=lfs merge=lfs -text
+*.py filter=lfs diff=lfs merge=lfs -text
