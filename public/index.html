@@ -118,6 +118,11 @@
 
         document.getElementById('uploadBook').addEventListener('change', function(event) {
             const file = event.target.files[0];
+            console.log(file); // Log file details
+            if (!file) {
+                alert('No file chosen');
+                return;
+            }
             const formData = new FormData();
             formData.append('file', file);
 

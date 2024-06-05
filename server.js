@@ -131,6 +131,7 @@ function startServer() {
   app.post('/upload', upload.single('file'), (req, res) => {
     const { file } = req;
     const filePath = path.join(__dirname, file.path);
+    console.log('File received:', file); // Log file details
 
     // Read file content
     const fileContent = fs.readFileSync(filePath);
@@ -149,6 +150,8 @@ function startServer() {
         return res.status(500).send('Error uploading file.');
       }
 
+      console.log('File uploaded to S3:', data.Location); // Log S3 URL
+
       // Store metadata in DynamoDB
       const metadata = {
         TableName: process.env.DYNAMODB_FILES_TABLE,
@@ -166,7 +169,7 @@ function startServer() {
           return res.status(500).send('Error saving metadata.');
         }
 
-        console.log(`File uploaded successfully. ${data.Location}`);
+        console.log('Metadata saved to DynamoDB'); // Log success
         res.json({ pdfUrl: data.Location });
       });
     });
