@@ -49,3 +49,8 @@ logs
 
 # AWS credentials
 *.pem
+
+
+test-file-downloaded.txt
+test-file.txt
+uploads/
