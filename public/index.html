@@ -83,6 +83,7 @@
         <div class="book-view" id="bookView">
             <!-- Display the uploaded book content here -->
         </div>
+        <iframe id="pdfViewer" style="width: 100%; height: 100%;" hidden></iframe>
     </div>
     <script>
         document.getElementById('createAccount').addEventListener('click', function() {
@@ -124,11 +125,10 @@
                 method: 'POST',
                 body: formData
             }).then(response => response.json()).then(data => {
-                if (data.audioUrl) {
-                    const audio = document.createElement('audio');
-                    audio.controls = true;
-                    audio.src = data.audioUrl;
-                    document.getElementById('bookView').appendChild(audio);
+                if (data.pdfUrl) {
+                    const pdfViewer = document.getElementById('pdfViewer');
+                    pdfViewer.src = data.pdfUrl;
+                    pdfViewer.hidden = false;
                 } else {
                     alert('Error uploading file');
                 }

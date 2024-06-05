@@ -79,6 +79,9 @@ function startServer() {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // Serve static files from the public directory
+  app.use(express.static(path.join(__dirname, 'public')));
+
   // Passport configuration
   passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
     const params = {
@@ -164,7 +167,7 @@ function startServer() {
         }
 
         console.log(`File uploaded successfully. ${data.Location}`);
-        res.json({ audioUrl: data.Location });
+        res.json({ pdfUrl: data.Location });
       });
     });
   });
@@ -175,7 +178,7 @@ function startServer() {
   app.use('/auth', authRoute); // Use the Auth route
 
   app.get('/', (req, res) => {
-    res.send('Welcome to the Voice of Power application!');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
   });
 
   app.post('/register', (req, res) => {
@@ -226,7 +229,8 @@ function startServer() {
     }
   });
 
-  app.listen(port, () => {
+  // Ensure the server listens on all network interfaces
+  app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port ${port}`);
   });
 }
