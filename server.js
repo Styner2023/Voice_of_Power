@@ -1,3 +1,6 @@
+// Load environment variables from .env file for local development
+require('dotenv').config();
+
 const AWS = require('aws-sdk');
 const express = require('express');
 const session = require('express-session');
@@ -12,6 +15,11 @@ const { getFileFromS3, uploadToS3 } = require('./s3-functions');
 const uploadRoute = require('./routes/upload');
 const ttsRoute = require('./routes/tts');
 const authRoute = require('./routes/auth');
+
+if (process.env.NODE_ENV !== 'production') {
+    // Only load from .env file if not in production
+    require('dotenv').config();
+}
 
 // Load parameters from AWS Systems Manager Parameter Store
 const ssm = new AWS.SSM();
