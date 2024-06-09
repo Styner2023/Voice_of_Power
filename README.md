@@ -1,9 +1,5 @@
 # Voice of Power
 
-Here's a comprehensive GitHub README template for your "Voice of Power" project:
-
-# Voice of Power
-
 Voice of Power is a web application that allows users to upload PDF books and have them read aloud using Text-to-Speech (TTS) technology. The application supports multiple languages, various voices, and two reading speeds. It is designed to be accessible 24/7, hosted for free, and aims to help individuals, including the formerly incarcerated, to have their stories read aloud.
 
 ## Table of Contents
