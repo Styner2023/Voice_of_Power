@@ -136,5 +136,3 @@ Acknowledgments
 1. Replace `https://github.com/yourusername/voice-of-power.git` with the actual URL of your GitHub repository.
 2. Customize the `.env` file variables with your actual credentials.
 3. Add any additional details or customization specific to your project.
-
-This template provides a clear, organized, and detailed README for your project, covering essential aspects to help users understand, install, and contribute to the project.
