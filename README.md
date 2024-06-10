@@ -180,8 +180,3 @@ This repository contains the detailed architectural design and documentation for
 #### Use Case Diagram
 
 ![Use Case Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/use_case_diagram.png)
-
----
-
-This version is organized and formatted for clarity, making it easier for others to understand your project's structure, contributing guidelines, and the architecture documentation on GitHub.
-
