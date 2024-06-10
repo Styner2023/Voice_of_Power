@@ -127,8 +127,3 @@ Open a pull request.
 Acknowledgments
 - Special thanks to the open-source community for their valuable contributions.
 - Inspired by the need to help individuals have their stories read aloud.
-
-### Instructions:
-1. Replace `https://github.com/yourusername/voice-of-power.git` with the actual URL of your GitHub repository.
-2. Customize the `.env` file variables with your actual credentials.
-3. Add any additional details or customization specific to your project.
