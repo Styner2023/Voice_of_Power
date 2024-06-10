@@ -112,19 +112,44 @@ voice-of-power/
 ├── package.json
 └── README.md
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
+Here is an improved version of your project structure section for your GitHub README:
 
-Contributing
-Contributions are welcome! Please follow the contributing guidelines.
+---
 
-Fork the repository.
-Create your feature branch (git checkout -b feature/your-feature).
-Commit your changes (git commit -m 'Add some feature').
-Push to the branch (git push origin feature/your-feature).
-Open a pull request.
+## Project Structure
 
-Acknowledgments
+```plaintext
+voice-of-power/
+├── models/
+│   ├── book.js
+│   └── user.js
+├── routes/
+│   ├── auth.js
+│   ├── tts.js
+│   └── upload.js
+├── uploads/
+├── .env
+├── server.js
+├── package.json
+└── README.md
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. **Fork the repository.**
+2. **Create your feature branch:** `git checkout -b feature/your-feature`.
+3. **Commit your changes:** `git commit -m 'Add some feature'`.
+4. **Push to the branch:** `git push origin feature/your-feature`.
+5. **Open a pull request.**
+
+## Acknowledgments
+
 - Special thanks to the open-source community for their valuable contributions.
 - Inspired by the need to help individuals have their stories read aloud.
 
@@ -135,19 +160,28 @@ Acknowledgments
 This repository contains the detailed architectural design and documentation for the Voice of Power project. Below are the key files and diagrams included in the repository:
 
 ### Project Files
+
 - [SOFTWARE_ARCHITECTURE.md](https://github.com/Styner2023/voice-of-power-architecture/blob/main/SOFTWARE_ARCHITECTURE.md): Detailed architectural documentation.
 
 ### UML Diagrams
 
 #### Activity Diagram
+
 ![Activity Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/activity_diagram.png)
 
 #### Class Diagram
+
 ![Class Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/class_diagram.png)
 
 #### Sequence Diagram
+
 ![Sequence Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/sequence_diagram.png)
 
 #### Use Case Diagram
+
 ![Use Case Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/use_case_diagram.png)
+
+---
+
+This version is organized and formatted for clarity, making it easier for others to understand your project's structure, contributing guidelines, and the architecture documentation on GitHub.
 
