@@ -112,28 +112,6 @@ voice-of-power/
 ├── package.json
 └── README.md
 
-Here is an improved version of your project structure section for your GitHub README:
-
----
-
-## Project Structure
-
-```plaintext
-voice-of-power/
-├── models/
-│   ├── book.js
-│   └── user.js
-├── routes/
-│   ├── auth.js
-│   ├── tts.js
-│   └── upload.js
-├── uploads/
-├── .env
-├── server.js
-├── package.json
-└── README.md
-```
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
