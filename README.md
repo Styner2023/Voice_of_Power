@@ -95,6 +95,7 @@ Ensure you set the following environment variables in your `.env` file:
 - `AWS_ACCESS_KEY_ID`: AWS access key ID.
 - `AWS_SECRET_ACCESS_KEY`: AWS secret access key.
 
+
 ## Project Structure
 
 ```plaintext
@@ -111,6 +112,7 @@ voice-of-power/
 ├── server.js
 ├── package.json
 └── README.md
+```
 
 ## License
 
