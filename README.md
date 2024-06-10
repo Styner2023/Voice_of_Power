@@ -127,3 +127,27 @@ Open a pull request.
 Acknowledgments
 - Special thanks to the open-source community for their valuable contributions.
 - Inspired by the need to help individuals have their stories read aloud.
+
+## 📁 Voice of Power Architecture 📁
+
+[Voice of Power Architecture Repository](https://github.com/Styner2023/voice-of-power-architecture)
+
+This repository contains the detailed architectural design and documentation for the Voice of Power project. Below are the key files and diagrams included in the repository:
+
+### Project Files
+- [SOFTWARE_ARCHITECTURE.md](https://github.com/Styner2023/voice-of-power-architecture/blob/main/SOFTWARE_ARCHITECTURE.md): Detailed architectural documentation.
+
+### UML Diagrams
+
+#### Activity Diagram
+![Activity Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/activity_diagram.png)
+
+#### Class Diagram
+![Class Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/class_diagram.png)
+
+#### Sequence Diagram
+![Sequence Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/sequence_diagram.png)
+
+#### Use Case Diagram
+![Use Case Diagram](https://github.com/Styner2023/voice-of-power-architecture/raw/main/use_case_diagram.png)
+
