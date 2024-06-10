@@ -133,6 +133,7 @@ Contributions are welcome! Please follow these steps:
 - Special thanks to the open-source community for their valuable contributions.
 - Inspired by the need to help individuals have their stories read aloud.
 
+
 ## 📁 Voice of Power Architecture Design 📁
 
 [Voice of Power Architecture Repository](https://github.com/Styner2023/voice-of-power-architecture)
