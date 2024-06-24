@@ -1,10 +1,12 @@
 require("dotenv").config();
 const {
-  S3Client,
+  S3Client, // Only declare S3Client once
   PutObjectCommand,
   GetObjectCommand,
   DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
+
+// Rest of your code...
 const { fromIni } = require("@aws-sdk/credential-providers");
 const { SSMClient, GetParametersCommand } = require("@aws-sdk/client-ssm");
 const {
@@ -22,12 +24,15 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const multer = require("multer");
 const cors = require("cors");
-const { getSignedUrl } = require("@aws-sdk/s3-request-persister");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 // Import routes
 const uploadRoute = require("./routes/upload");
 const ttsRoute = require("./routes/tts");
 const authRoute = require("./routes/auth");
+
+// Import s3 from upload.js
+const { s3 } = require('./routes/upload');
 
 // Load parameters from AWS Systems Manager Parameter Store
 const ssm = new SSMClient({ region: process.env.AWS_REGION });
@@ -46,6 +51,7 @@ const params = {
   WithDecryption: true,
 };
 
+// Rest of your code...
 (async () => {
   try {
     const data = await ssm.send(new GetParametersCommand(params));

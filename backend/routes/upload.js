@@ -1,8 +1,9 @@
 const express = require("express");
 const multer = require("multer");
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3"); // Removed extra comma
 const { fromIni } = require("@aws-sdk/credential-providers");
 
+// Rest of your code...
 const router = express.Router();
 
 const s3 = new S3Client({
@@ -36,4 +37,4 @@ router.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = { router, s3 };
