@@ -5,8 +5,6 @@ const {
   GetObjectCommand,
   DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
-
-// Rest of your code...
 const { fromIni } = require("@aws-sdk/credential-providers");
 const { SSMClient, GetParametersCommand } = require("@aws-sdk/client-ssm");
 const {
@@ -23,16 +21,37 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const multer = require("multer");
+const multerS3 = require("multer-s3");
+const aws = require("aws-sdk");
 const cors = require("cors");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const authRoute = require("./routes/auth"); // Ensure to use correct path
+const uploadRoute = require("./routes/upload"); // Ensure to use correct path
 
-// Import routes
-const uploadRoute = require("./routes/upload");
-const ttsRoute = require("./routes/tts");
-const authRoute = require("./routes/auth");
+// Initialize express app
+const app = express();
 
-// Import s3 from upload.js
-const { s3 } = require('./routes/upload');
+// AWS configuration
+aws.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
+
+const s3 = new aws.S3();
+
+// Multer-S3 configuration for file uploads
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.S3_BUCKET_NAME,
+    acl: "public-read",
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString() + "-" + path.basename(file.originalname));
+    },
+  }),
+  limits: { fileSize: 1024 * 1024 * 10 }, // 10 MB file size limit
+});
 
 // Load parameters from AWS Systems Manager Parameter Store
 const ssm = new SSMClient({ region: process.env.AWS_REGION });
@@ -51,7 +70,6 @@ const params = {
   WithDecryption: true,
 };
 
-// Rest of your code...
 (async () => {
   try {
     const data = await ssm.send(new GetParametersCommand(params));
@@ -89,10 +107,9 @@ const params = {
 })();
 
 function startServer() {
-  const app = express();
   const port = process.env.PORT || 3000;
 
-  // AWS configuration
+  // AWS configuration using the AWS SDK v3
   const s3 = new S3Client({
     region: process.env.AWS_REGION,
     credentials: fromIni({ profile: "default" }), // Adjust profile as needed
@@ -103,10 +120,6 @@ function startServer() {
     region: process.env.AWS_REGION,
     credentials: fromIni({ profile: "default" }), // Adjust profile as needed
   });
-
-  // Multer configuration
-  const storage = multer.memoryStorage();
-  const upload = multer({ storage: storage });
 
   // Middleware
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -178,8 +191,11 @@ function startServer() {
 
   // Routes
   app.use("/api", uploadRoute);
-  app.use("/api", ttsRoute); // Use the TTS route
-  app.use("/api", authRoute); // Use the Auth route
+  app.use("/api", authRoute);
+
+  app.post("/upload", upload.single("file"), (req, res, next) => {
+    res.json({ fileUrl: req.file.location });
+  });
 
   app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
@@ -238,9 +254,6 @@ function startServer() {
       res.status(401).send("Not authenticated.");
     }
   });
-
-  // File upload route
-  const { filename } = req.params;
 
   // Ensure the server listens on all network interfaces
   app.listen(port, "0.0.0.0", () => {
