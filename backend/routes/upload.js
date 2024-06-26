@@ -1,12 +1,16 @@
 const express = require("express");
 const multer = require("multer");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const { fromIni } = require("@aws-sdk/credential-providers");
+require("dotenv").config();
 const router = express.Router();
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
-  credentials: fromIni({ profile: "default" }), // Adjust profile as needed
+  endpoint: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com`, // Correct endpoint
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
 const storage = multer.memoryStorage();

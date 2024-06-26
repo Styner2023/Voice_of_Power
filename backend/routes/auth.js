@@ -3,10 +3,10 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const User = require("../models/user");
+const User = require("../../models/user"); // Correct path to user model
 require("dotenv").config();
 
-// Register
+// Registration route
 router.post("/register", (req, res) => {
   const { name, email, password } = req.body;
   let errors = [];
@@ -49,7 +49,7 @@ router.post("/register", (req, res) => {
   });
 });
 
-// Login
+// Login route
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
