@@ -2,32 +2,19 @@
   "name": "voice-of-power",
   "version": "1.0.0",
   "description": "",
-<<<<<<< HEAD
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-=======
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js"
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-    "@aws-sdk/client-s3": "^3.600.0",
-    "@aws-sdk/s3-request-presigner": "^3.600.0",
-    "aws-sdk": "^2.1635.0",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.2",
-=======
     "@aws-sdk/client-dynamodb": "^3.602.0",
     "@aws-sdk/client-s3": "^3.600.0",
-    "@aws-sdk/client-ssm": "^3.600.0",
+    "@aws-sdk/client-ssm": "^3.603.0",
     "@aws-sdk/credential-providers": "^3.600.0",
+    "@aws-sdk/lib-dynamodb": "^3.602.0",
     "@aws-sdk/s3-request-presigner": "^3.600.0",
     "@uploadthing/react": "^6.6.0",
     "aws-sdk": "^2.1648.0",
@@ -35,15 +22,11 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "chunk": "^0.0.3",
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
-<<<<<<< HEAD
-=======
     "fs-extra": "^11.2.0",
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
     "jsonwebtoken": "^9.0.2",
     "minio": "^8.0.0",
     "mongoose": "^8.4.0",
@@ -53,12 +36,6 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "pdf-parse": "^1.1.1",
-<<<<<<< HEAD
-    "xml2js": "^0.6.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.1"
-=======
     "pdfjs-dist": "^4.3.136",
     "sharp": "^0.33.4",
     "uploadthing": "^6.12.0",
@@ -73,6 +50,5 @@
     "@types/react-dom": "^18.3.0",
     "nodemon": "^3.1.1",
     "typescript": "^5.5.2"
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
   }
 }

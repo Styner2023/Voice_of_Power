@@ -10,71 +10,34 @@ body {
 }
 
 .left-panel {
-<<<<<<< HEAD
-    width: 100%; /* Full width on mobile */
-=======
     width: 100%;
-    /* Full width on mobile */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
     background-color: #2b2b2b;
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-<<<<<<< HEAD
-    border-bottom: 1px solid #444; /* Change to bottom border for mobile */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    padding-top: 10px; /* Reduce padding-top to bring elements higher */
-}
-
-.left-panel img.logo {
-    width: 250px; /* Set size to 250x250 */
-    height: 250px;
-    margin-bottom: 0; /* Remove bottom margin */
-}
-
-.left-panel h1 {
-    font-size: 48px; /* Increase font size */
-    color: #ffcc00;
-    text-align: center;
-    margin: 0; /* Remove margin to bring closer to logo */
-    font-weight: 900; /* Make the font heavier */
-    font-family: 'Trebuchet MS', sans-serif;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-top: -20px; /* Negative margin to bring it closer to the logo */
-=======
     border-bottom: 1px solid #444;
-    /* Change to bottom border for mobile */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     padding-top: 10px;
-    /* Reduce padding-top to bring elements higher */
 }
 
 .left-panel img.logo {
     width: 250px;
-    /* Set size to 250x250 */
     height: 250px;
     margin-bottom: 0;
-    /* Remove bottom margin */
 }
 
 .left-panel h1 {
     font-size: 48px;
-    /* Increase font size */
     color: #ffcc00;
     text-align: center;
     margin: 0;
-    /* Remove margin to bring closer to logo */
     font-weight: 900;
-    /* Make the font heavier */
     font-family: 'Trebuchet MS', sans-serif;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     margin-top: -20px;
-    /* Negative margin to bring it closer to the logo */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
 }
 
 .colorful-underline {
@@ -82,15 +45,8 @@ body {
     height: 5px;
     background: linear-gradient(to right, red, yellow, green);
     border-radius: 5px;
-<<<<<<< HEAD
-    margin-top: 10px; /* Adjust margin to place it directly below the title */
-    margin-bottom: 30px; /* Increase bottom margin for more space before next elements */
-=======
     margin-top: 10px;
-    /* Adjust margin to place it directly below the title */
     margin-bottom: 30px;
-    /* Increase bottom margin for more space before next elements */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
 }
 
 .left-panel input[type="file"],
@@ -100,12 +56,7 @@ body {
 .left-panel input[type="password"] {
     margin: 10px 0;
     padding: 12px;
-<<<<<<< HEAD
-    width: 90%; /* Increase width for better spacing on mobile */
-=======
     width: 90%;
-    /* Increase width for better spacing on mobile */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
     border: none;
     border-radius: 25px;
     font-size: 16px;
@@ -128,12 +79,7 @@ body {
 .control-buttons {
     display: flex;
     justify-content: space-between;
-<<<<<<< HEAD
-    width: 90%; /* Increase width for better spacing on mobile */
-=======
     width: 90%;
-    /* Increase width for better spacing on mobile */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
     margin-top: 20px;
 }
 
@@ -142,23 +88,13 @@ body {
 }
 
 .right-panel {
-<<<<<<< HEAD
-    width: 100%; /* Full width on mobile */
-=======
     width: 100%;
-    /* Full width on mobile */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
     background-color: #333;
     padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-<<<<<<< HEAD
-    flex: 1; /* Allow it to grow and fill the remaining space */
-=======
     flex: 1;
-    /* Allow it to grow and fill the remaining space */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
 }
 
 .right-panel .book-view {
@@ -188,29 +124,17 @@ body {
     margin-top: 10px;
 }
 
-/* Specific styles for Username and Password fields */
 .form-section input[type="text"].small,
 .form-section input[type="password"].small {
-<<<<<<< HEAD
-    width: 90%; /* Increase width for better spacing on mobile */
-=======
     width: 90%;
-    /* Increase width for better spacing on mobile */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
     padding: 12px;
     font-size: 16px;
     border-radius: 25px;
     text-align: center;
 }
 
-/* Specific styles for Login button */
 .form-section button.small {
-<<<<<<< HEAD
-    width: 90%; /* Increase width for better spacing on mobile */
-=======
     width: 90%;
-    /* Increase width for better spacing on mobile */
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
     padding: 12px;
     font-size: 16px;
     border-radius: 25px;
@@ -225,40 +149,19 @@ body {
     transform: translateY(-2px);
 }
 
-/* Media Queries for Responsive Design */
 @media (min-width: 600px) {
     body {
-<<<<<<< HEAD
-        flex-direction: row; /* Change to row for larger screens */
-    }
-    .left-panel {
-        width: 25%; /* Set width for larger screens */
-        border-right: 1px solid #444; /* Change to right border for larger screens */
-        border-bottom: none; /* Remove bottom border for larger screens */
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-    }
-    .right-panel {
-        width: 75%; /* Set width for larger screens */
-    }
-}
-=======
         flex-direction: row;
-        /* Change to row for larger screens */
     }
 
     .left-panel {
         width: 25%;
-        /* Set width for larger screens */
         border-right: 1px solid #444;
-        /* Change to right border for larger screens */
         border-bottom: none;
-        /* Remove bottom border for larger screens */
         box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
     }
 
     .right-panel {
         width: 75%;
-        /* Set width for larger screens */
     }
 }
->>>>>>> b0697735b1c4cefb74a942f9e92597cbf7a48da2
