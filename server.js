@@ -154,14 +154,15 @@ function startServer() {
     };
 
     s3.send(new PutObjectCommand(s3Params)).then((data) => {
-      console.log('File uploaded to S3:', `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.originalname}`); // Log S3 URL
+      const fileUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.originalname}`;
+      console.log('File uploaded to S3:', fileUrl); // Log S3 URL
 
       // Store metadata in DynamoDB
       const metadata = {
         TableName: process.env.DYNAMODB_FILES_TABLE,
         Item: {
           filename: file.originalname,
-          s3Url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.originalname}`,
+          s3Url: fileUrl,
           uploadDate: new Date().toISOString(),
           userId: req.user ? req.user.email : null,
         },
@@ -169,7 +170,7 @@ function startServer() {
 
       dynamoDb.send(new PutCommand(metadata)).then(() => {
         console.log('Metadata saved to DynamoDB'); // Log success
-        res.json({ pdfUrl: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.originalname}` });
+        res.json({ fileUrl }); // Return the file URL in the response
       }).catch((err) => {
         console.error('Error saving metadata:', err);
         res.status(500).send('Error saving metadata.');
