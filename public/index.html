@@ -65,56 +65,33 @@
             <option value="slow">Slow Speed</option>
             <option value="fast">Fast Speed</option>
         </select>
-        <button id="createAccount">Create Account</button>
         <div class="control-buttons">
             <button id="playButton"><i class="fas fa-play"></i> Play</button>
             <button id="pauseButton"><i class="fas fa-pause"></i> Pause</button>
-        </div>
-
-        <!-- Login Form -->
-        <div class="form-section">
-            <form id="loginForm">
-                <input type="text" id="loginUsername" placeholder="Username" class="small">
-                <input type="password" id="loginPassword" placeholder="Password" class="small">
-                <button type="button" id="loginButton" class="small">Login</button>
-            </form>
         </div>
     </div>
     <div class="right-panel">
         <div class="book-view" id="bookView">
             <!-- Display the uploaded book content here -->
+            <iframe id="pdfViewer" style="width: 100%; height: 100%;"></iframe>
         </div>
-        <iframe id="pdfViewer" style="width: 100%; height: 100%;" hidden></iframe>
+        <div class="user-menu">
+            <div class="user-icon">U</div>
+            <div class="dropdown-menu">
+                <a href="#view-uploads">View Uploads</a>
+                <a href="#upload-new-pdf">Upload New PDF</a>
+                <a href="#settings">Settings</a>
+                <a href="#logout">Logout</a>
+            </div>
+        </div>
     </div>
     <script>
-        document.getElementById('createAccount').addEventListener('click', function () {
-            alert('Account creation feature coming soon!');
-        });
-
         document.getElementById('playButton').addEventListener('click', function () {
             // Play functionality here
         });
 
         document.getElementById('pauseButton').addEventListener('click', function () {
             // Pause functionality here
-        });
-
-        document.getElementById('loginButton').addEventListener('click', function () {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-
-            fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `username=${username}&password=${password}`
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    alert('Login successful');
-                    // Redirect to dashboard or update UI accordingly
-                } else {
-                    alert('Login failed');
-                }
-            });
         });
 
         // File upload
@@ -131,16 +108,15 @@
                     body: formData
                 }).then(response => {
                     if (response.ok) {
-                        return response.text();
+                        return response.json(); // Expecting JSON response from server
                     } else {
                         throw new Error('File upload failed.');
                     }
-                }).then(text => {
+                }).then(data => {
                     alert('File uploaded successfully.');
-                    // Optionally, display the PDF
+                    // Display the PDF
                     const pdfViewer = document.getElementById('pdfViewer');
-                    pdfViewer.src = `/files/${file.name}`;
-                    pdfViewer.hidden = false;
+                    pdfViewer.src = data.fileUrl; // Update src with the URL from the response
                 }).catch(error => {
                     console.error(error);
                     alert('File upload failed. Please check your server and CORS configuration.');

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice of Power</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel" id="leftPanel">
+            <button class="toggle-panel" onclick="togglePanel()" aria-label="Toggle panel">☰</button>
+            <div class="panel-content">
+                <img src="Voice_of_Power_logo_128x128_corrected.png" alt="Voice of Power Logo" class="logo">
+                <h1>Voice of Power</h1>
+                <div class="colorful-underline"></div>
+                <input type="file" id="uploadBook" accept="application/pdf">
+                <select id="voiceSelection">
+                    <option value="wataniVoice">Watani Stiner - Voice of Power (English)</option>
+                    <option value="wataniVoiceSpanish">Watani Stiner - Voice of Power (Spanish)</option>
+                    <option value="wataniVoiceFrench">Watani Stiner - Voice of Power (French)</option>
+                    <option value="wataniVoiceGerman">Watani Stiner - Voice of Power (German)</option>
+                </select>
+                <select id="languageSelection">
+                    <option>English</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                    <option>German</option>
+                </select>
+                <select id="voiceSpeed">
+                    <option value="0.5">0.5x Speed</option>
+                    <option value="1" selected>Normal Speed</option>
+                    <option value="1.5">1.5x Speed</option>
+                    <option value="2">2x Speed</option>
+                </select>
+                <div class="control-buttons">
+                    <button id="playButton" onclick="togglePlayPause()">Play</button>
+                    <button id="pauseButton" onclick="togglePlayPause()">Pause</button>
+                </div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="top-bar">
+                <div class="user-profile">
+                    <div class="avatar" onclick="toggleDropdown()">US</div>
+                    <div id="userDropdown" class="dropdown-content">
+                        <a href="#" onclick="viewUploads()">View Uploads</a>
+                        <a href="#" onclick="uploadNew()">Upload New PDF</a>
+                        <a href="#" onclick="openSettings()">Settings</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div class="book-view">
+                <iframe id="pdfViewer" src="about:blank"></iframe>
+                <div class="pdf-controls">
+                    <button onclick="togglePlayPause()" id="playPauseBtn">▶</button>
+                    <select onchange="changeSpeed()" id="speedSelect">
+                        <option value="0.5">0.5x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                    <button onclick="toggleHighlight()" id="highlightBtn">HL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        let isPlaying = false;
+        let isHighlighting = false;
+
+        function togglePanel() {
+            document.getElementById('leftPanel').classList.toggle('collapsed');
+        }
+
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            playPauseBtn.textContent = isPlaying ? '❚❚' : '▶';
+            console.log(isPlaying ? 'Playing' : 'Paused');
+            // Implement actual play/pause functionality here
+        }
+
+        function changeSpeed() {
+            const speed = document.getElementById('speedSelect').value;
+            console.log(`Speed changed to ${speed}`);
+            // Implement actual speed change functionality here
+        }
+
+        function toggleHighlight() {
+            isHighlighting = !isHighlighting;
+            const highlightBtn = document.getElementById('highlightBtn');
+            highlightBtn.style.backgroundColor = isHighlighting ? '#cc0000' : '#ffcc00';
+            console.log(`Highlighting ${isHighlighting ? 'enabled' : 'disabled'}`);
+            // Implement highlighting functionality here
+        }
+
+        function toggleDropdown() {
+            var dropdown = document.getElementById("userDropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        function viewUploads() { alert("View Uploads clicked"); }
+        function uploadNew() { document.getElementById('uploadBook').click(); }
+        function openSettings() { alert("Settings clicked"); }
+        function logout() { alert("Logout clicked"); }
+
+        document.getElementById('uploadBook').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                axios.post('/upload', formData)
+                    .then(response => {
+                        if (response.data.success) {
+                            alert('File uploaded successfully.');
+                            const pdfViewer = document.getElementById('pdfViewer');
+                            pdfViewer.src = `/files/${encodeURIComponent(file.name)}`;
+                        } else {
+                            throw new Error('File upload failed.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('File upload error:', error);
+                        alert(`File upload failed: ${error.message}`);
+                    });
+            } else {
+                alert('Please upload a valid PDF file.');
+            }
+        });
+
+        // Keyboard shortcut for play/pause
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space') {
+                event.preventDefault(); // Prevent scrolling
+                togglePlayPause();
+            }
+        });
+
+        // Close the dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.avatar')) {
+                var dropdown = document.getElementById("userDropdown");
+                if (dropdown.style.display === "block") {
+                    dropdown.style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

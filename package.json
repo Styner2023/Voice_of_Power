@@ -17,7 +17,7 @@
     "@aws-sdk/lib-dynamodb": "^3.602.0",
     "@aws-sdk/s3-request-presigner": "^3.600.0",
     "@uploadthing/react": "^6.6.0",
-    "aws-sdk": "^2.1648.0",
+    "aws-sdk": "^2.1655.0",
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",

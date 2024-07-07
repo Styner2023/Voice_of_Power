@@ -50,18 +50,25 @@ body {
 }
 
 .left-panel input[type="file"],
-.left-panel button,
-.left-panel select,
-.left-panel input[type="text"],
-.left-panel input[type="password"] {
+.left-panel select {
     margin: 10px 0;
     padding: 12px;
     width: 90%;
-    border: none;
-    border-radius: 25px;
+    border: 2px solid #ffcc00;
+    border-radius: 5px;
     font-size: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+    background-color: #333;
+    color: #ffffff;
     transition: all 0.3s ease;
+}
+
+.left-panel select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns="http://www.w3.org/2000/svg"%20viewBox="0%200%204%205"><path%20fill="none"%20stroke="%23fff"%20stroke-width="1"%20d="M2%200L0%202h4zm0%205L0%203h4z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 12px;
 }
 
 .left-panel button {
@@ -69,6 +76,13 @@ body {
     color: #333;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 90%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: none;
+    margin: 10px 0;
 }
 
 .left-panel button:hover {
@@ -95,6 +109,7 @@ body {
     justify-content: center;
     align-items: center;
     flex: 1;
+    position: relative;
 }
 
 .right-panel .book-view {
@@ -108,45 +123,58 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.form-section {
-    width: 100%;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.form-section form {
+.user-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.form-section button {
-    margin-top: 10px;
-}
-
-.form-section input[type="text"].small,
-.form-section input[type="password"].small {
-    width: 90%;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 25px;
-    text-align: center;
-}
-
-.form-section button.small {
-    width: 90%;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 25px;
+.user-icon {
+    width: 40px;
+    height: 40px;
     background-color: #ffcc00;
     color: #333;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
-.form-section button.small:hover {
+.user-icon:hover {
     background-color: #e6b800;
-    transform: translateY(-2px);
+}
+
+.dropdown-menu {
+    display: none;
+    flex-direction: column;
+    background-color: #333;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.user-menu:hover .dropdown-menu {
+    display: flex;
+}
+
+.dropdown-menu a {
+    color: #ffcc00;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #444;
 }
 
 @media (min-width: 600px) {
