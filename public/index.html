@@ -74,15 +74,44 @@
             <iframe id="pdfViewer" style="width: 100%; height: 100%;"></iframe>
         </div>
         <div class="user-menu">
-            <div class="user-icon">U</div>
-            <div class="dropdown-menu">
-                <a href="#view-uploads">View Uploads</a>
-                <a href="#upload-new-pdf">Upload New PDF</a>
-                <a href="#settings">Settings</a>
-                <a href="#logout">Logout</a>
+            <div class="user-icon" id="userIcon">U</div>
+            <div class="dropdown-menu" id="userDropdown">
+                <a href="#" id="loginLink">Login</a>
+                <a href="#" id="signUpLink">Sign Up</a>
+                <a href="#view-uploads" id="viewUploadsLink" style="display: none;">View Uploads</a>
+                <a href="#upload-new-pdf" id="uploadNewPDFLink" style="display: none;">Upload New PDF</a>
+                <a href="#settings" id="settingsLink" style="display: none;">Settings</a>
+                <a href="#" id="logoutLink" style="display: none;">Logout</a>
             </div>
         </div>
     </div>
+
+    <!-- Modal for Login and Sign Up -->
+    <div id="authModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="closeAuthModal">&times;</span>
+            <div id="loginFormContainer">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="#" id="showSignUp">Sign Up</a></p>
+            </div>
+            <div id="signUpFormContainer" style="display: none;">
+                <h2>Sign Up</h2>
+                <form id="signUpForm">
+                    <input type="text" name="name" placeholder="Name" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Sign Up</button>
+                </form>
+                <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.getElementById('playButton').addEventListener('click', function () {
             // Play functionality here
@@ -121,7 +150,136 @@
                 });
             }
         });
+
+        // Toggle user dropdown menu
+        document.getElementById('userIcon').addEventListener('click', function () {
+            const userDropdown = document.getElementById('userDropdown');
+            userDropdown.style.display = userDropdown.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Show login modal
+        document.getElementById('loginLink').addEventListener('click', function () {
+            document.getElementById('authModal').style.display = 'block';
+            document.getElementById('loginFormContainer').style.display = 'block';
+            document.getElementById('signUpFormContainer').style.display = 'none';
+        });
+
+        // Show sign-up modal
+        document.getElementById('signUpLink').addEventListener('click', function () {
+            document.getElementById('authModal').style.display = 'block';
+            document.getElementById('loginFormContainer').style.display = 'none';
+            document.getElementById('signUpFormContainer').style.display = 'block';
+        });
+
+        // Close modal
+        document.getElementById('closeAuthModal').addEventListener('click', function () {
+            document.getElementById('authModal').style.display = 'none';
+        });
+
+        // Switch to sign-up form
+        document.getElementById('showSignUp').addEventListener('click', function () {
+            document.getElementById('loginFormContainer').style.display = 'none';
+            document.getElementById('signUpFormContainer').style.display = 'block';
+        });
+
+        // Switch to login form
+        document.getElementById('showLogin').addEventListener('click', function () {
+            document.getElementById('signUpFormContainer').style.display = 'none';
+            document.getElementById('loginFormContainer').style.display = 'block';
+        });
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('/login', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    // Update UI on successful login
+                    updateUserMenu(true);
+                    document.getElementById('authModal').style.display = 'none';
+                } else {
+                    throw new Error('Login failed.');
+                }
+            }).catch(error => {
+                console.error(error);
+                alert('Login failed. Please try again.');
+            });
+        });
+
+        // Handle sign-up form submission
+        document.getElementById('signUpForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                password: formData.get('password')
+            };
+
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(response => {
+                if (response.ok) {
+                    // Update UI on successful sign-up
+                    updateUserMenu(true);
+                    document.getElementById('authModal').style.display = 'none';
+                } else {
+                    throw new Error('Sign-up failed.');
+                }
+            }).catch(error => {
+                console.error(error);
+                alert('Sign-up failed. Please try again.');
+            });
+        });
+
+        function updateUserMenu(isLoggedIn) {
+            if (isLoggedIn) {
+                document.getElementById('loginLink').style.display = 'none';
+                document.getElementById('signUpLink').style.display = 'none';
+                document.getElementById('viewUploadsLink').style.display = 'block';
+                document.getElementById('uploadNewPDFLink').style.display = 'block';
+                document.getElementById('settingsLink').style.display = 'block';
+                document.getElementById('logoutLink').style.display = 'block';
+            } else {
+                document.getElementById('loginLink').style.display = 'block';
+                document.getElementById('signUpLink').style.display = 'block';
+                document.getElementById('viewUploadsLink').style.display = 'none';
+                document.getElementById('uploadNewPDFLink').style.display = 'none';
+                document.getElementById('settingsLink').style.display = 'none';
+                document.getElementById('logoutLink').style.display = 'none';
+            }
+        }
+
+        document.getElementById('logoutLink').addEventListener('click', function () {
+            fetch('/logout', {
+                method: 'GET'
+            }).then(() => {
+                updateUserMenu(false);
+            }).catch(error => {
+                console.error(error);
+                alert('Logout failed. Please try again.');
+            });
+        });
+
+        // Initial check to update menu based on login state
+        fetch('/check-login')
+            .then(response => response.json())
+            .then(data => {
+                updateUserMenu(data.isLoggedIn);
+            })
+            .catch(error => {
+                console.error('Error checking login state:', error);
+            });
     </script>
 </body>
 </html>
-
+	

@@ -95,10 +95,7 @@ function startServer() {
       Key: { email },
     };
 
-    dynamoDb.send(new GetCommand(params), (err, data) => {
-      if (err) {
-        return done(err);
-      }
+    dynamoDb.send(new GetCommand(params)).then(data => {
       const user = data.Item;
       if (!user) {
         return done(null, false, { message: 'Incorrect email.' });
@@ -110,7 +107,7 @@ function startServer() {
         }
         return done(null, false, { message: 'Incorrect password.' });
       });
-    });
+    }).catch(err => done(err));
   }));
 
   passport.serializeUser((user, done) => {
@@ -123,12 +120,9 @@ function startServer() {
       Key: { email },
     };
 
-    dynamoDb.send(new GetCommand(params), (err, data) => {
-      if (err) {
-        return done(err);
-      }
+    dynamoDb.send(new GetCommand(params)).then(data => {
       done(null, data.Item);
-    });
+    }).catch(err => done(err));
   });
 
   const upload = multer({ dest: 'uploads/' });
@@ -181,6 +175,80 @@ function startServer() {
     });
   });
 
+  // Route to view uploads
+  app.get('/uploads', (req, res) => {
+      if (req.isAuthenticated()) {
+          const params = {
+              TableName: process.env.DYNAMODB_FILES_TABLE,
+              KeyConditionExpression: 'userId = :userId',
+              ExpressionAttributeValues: {
+                  ':userId': req.user.email,
+              },
+          };
+
+          dynamoDb.send(new QueryCommand(params)).then((data) => {
+              res.status(200).json(data.Items);
+          }).catch((err) => {
+              console.error('Error fetching uploads:', err);
+              res.status(500).send('Error fetching uploads.');
+          });
+      } else {
+          res.status(401).send('Not authenticated.');
+      }
+  });
+
+  // Route to handle new PDF upload
+  app.post('/upload-new-pdf', upload.single('file'), (req, res) => {
+      if (req.isAuthenticated()) {
+          const { file } = req;
+          const filePath = path.join(__dirname, file.path);
+          const fileContent = fs.readFileSync(filePath);
+
+          const s3Params = {
+              Bucket: process.env.S3_BUCKET_NAME,
+              Key: file.originalname,
+              Body: fileContent,
+              ContentType: file.mimetype,
+          };
+
+          s3.send(new PutObjectCommand(s3Params)).then((data) => {
+              const fileUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.originalname}`;
+
+              const metadata = {
+                  TableName: process.env.DYNAMODB_FILES_TABLE,
+                  Item: {
+                      filename: file.originalname,
+                      s3Url: fileUrl,
+                      uploadDate: new Date().toISOString(),
+                      userId: req.user.email,
+                  },
+              };
+
+              dynamoDb.send(new PutCommand(metadata)).then(() => {
+                  res.status(200).json({ fileUrl });
+              }).catch((err) => {
+                  console.error('Error saving metadata:', err);
+                  res.status(500).send('Error saving metadata.');
+              });
+          }).catch((err) => {
+              console.error('Error uploading file:', err);
+              res.status(500).send('Error uploading file.');
+          });
+      } else {
+          res.status(401).send('Not authenticated.');
+      }
+  });
+
+  // Route to handle settings
+  app.get('/settings', (req, res) => {
+      if (req.isAuthenticated()) {
+          // Implement settings logic here
+          res.status(200).send('Settings page'); // Placeholder response
+      } else {
+          res.status(401).send('Not authenticated.');
+      }
+  });
+
   app.use('/upload', uploadRoute);
   app.use('/tts', ttsRoute);
   app.use('/auth', authRoute);
@@ -191,8 +259,16 @@ function startServer() {
 
   app.post('/register', (req, res) => {
     const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).send('All fields are required.');
+    }
+
+    console.log('Received registration request:', req.body);
+
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
+        console.error('Error hashing password:', err);
         return res.status(500).send('Error registering new user.');
       }
 
@@ -210,26 +286,23 @@ function startServer() {
     });
   });
 
-  app.post('/login', passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/' }));
+  app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/' }));
 
-  app.get('/dashboard', (req, res) => {
+  app.get('/logout', (req, res) => {
+    req.logout((err) => {
+      if (err) {
+        console.error('Logout error:', err);
+        return res.status(500).send('Logout failed.');
+      }
+      res.redirect('/');
+    });
+  });
+
+  app.get('/check-login', (req, res) => {
     if (req.isAuthenticated()) {
-      const params = {
-        TableName: process.env.DYNAMODB_FILES_TABLE,
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: {
-          ':userId': req.user.email,
-        },
-      };
-
-      dynamoDb.send(new QueryCommand(params)).then((data) => {
-        res.status(200).json(data.Items);
-      }).catch((err) => {
-        console.error('Error fetching user data:', err);
-        res.status(500).send('Error fetching user data.');
-      });
+      res.json({ isLoggedIn: true });
     } else {
-      res.status(401).send('Not authenticated.');
+      res.json({ isLoggedIn: false });
     }
   });
 
