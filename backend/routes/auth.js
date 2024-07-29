@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const User = require("../../models/user"); // Correct path to user model
+const User = require("../../models/User"); // Correct path to user model
 require("dotenv").config();
 
 // Registration route
